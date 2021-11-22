@@ -1,0 +1,48 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="d-flex align-items-start justify-content-around">
+    <div class="col shadow p-4 m-2">
+        <h2>Add Genre</h2>
+        <form asp-action="AddGenre" asp-route-id="@Model.Id">
+            <div class="form-group">
+                <select name="genreId" class="form-control" asp-items="ViewBag.Genres"></select>
+            </div>
+            <button type="submit" class="btn btn-primary icon-wrapper">
+                <i class="fas fa-plus"></i>
+            </button>
+        </form>
+    </div>
+    <div class="col shadow p-4 m-2">
+        <h2>Genres</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var genre in Model.Genres)
+                {
+                    <tr>
+                        <td>@genre.Name</td>
+                        <td>
+                            <form asp-action="RemoveGenre" asp-route-id="@Model.Id">
+                                <input type="hidden" name="genreId" value="@genre.Id" />
+                                <button type="submit" class="btn btn-danger icon-wrapper">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -7,14 +7,16 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary icon-wrapper">
+        <i class="fas fa-plus"></i>
+    </a>
 </p>
 
 <table class="table table-bordered shadow">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Image</th>
+            <th>Movie</th>
+            <th>Genres</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,24 +25,31 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <div class="d-flex">
+                        <img style="width: 45pt; height: 60pt" alt="avatar" src="~/Files/Images/Movies/@item.ImagePath" />
+                        <p class="mx-2">@item.Name</p>
+                    </div>
                 </td>
                 <td>
-                    <div class="form-group">
-                        <img style="width: 30pt; height: 50pt" alt="avatar" src="~/Files/Images/Movies/@item.ImagePath" />
-                    </div>
+                    @foreach (var genre in item.Genres)
+                    {
+                        <div class="badge badge-info p-1">@genre.Name</div>
+                    }
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary icon-wrapper">
                         <i class="fas fa-info"></i>
                     </a>
+                    <a asp-action="Reviews" asp-route-id="@item.Id" class="btn btn-primary icon-wrapper">
+                        <i class="fas fa-comment"></i>
+                    </a>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
+                    <a asp-action="Genres" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
                         <i class="fas fa-tags"></i>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
+                    <a asp-action="Actoors" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
                         <i class="fas fa-users"></i>
                     </a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger icon-wrapper">
@@ -51,9 +60,3 @@
         }
     </tbody>
 </table>
-
-<style>
-    .icon-wrapper {
-        width: 3rem;
-    }
-</style>

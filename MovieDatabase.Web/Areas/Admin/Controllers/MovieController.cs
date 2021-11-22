@@ -15,16 +15,15 @@ using MovieDatabase.Web.Services;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Route("[area]")]
     public class MovieController : BaseAdminController
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IFileService _fileService;
 
-        public MovieController(IUnitOfWork unit,
-                               IWebHostEnvironment environment,
-                               IFileService fileService) : base(unit)
+        public MovieController(
+            IUnitOfWork unit,
+            IWebHostEnvironment environment,
+            IFileService fileService) : base(unit)
         {
             _environment = environment;
             _fileService = fileService;
@@ -191,5 +190,61 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
         //{
         //    return _context.Movies.Any(e => e.Id == id);
         //}
+
+        [HttpGet("[controller]/[action]/{id:guid}")]
+        public IActionResult Genres(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Genres"] = new SelectList(Unit.GenreRepository.All().Except(movie.Genres), "Id", "Name");
+
+            return View(movie);
+        }
+
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        public IActionResult AddGenre(Guid id, Guid genreId)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var genre = Unit.GenreRepository.Find(genreId);
+            if (genre == null)
+            {
+                return NotFound();
+            }
+
+            movie.Genres.Add(genre);
+            Unit.Commit();
+
+            return RedirectToAction(nameof(Genres), new { id });
+        }
+
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        public IActionResult RemoveGenre(Guid id, Guid genreId)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var genre = Unit.GenreRepository.Find(genreId);
+            if (genre == null)
+            {
+                return NotFound();
+            }
+
+            movie.Genres.Remove(genre);
+            Unit.Commit();
+
+            return RedirectToAction(nameof(Genres), new { id });
+        }
     }
 }

@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDatabase.Web", "MovieDatabase.Web\MovieDatabase.Web.csproj", "{3DFC87BF-6862-42BF-82FF-3C996265FC84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieDatabase.Web", "MovieDatabase.Web\MovieDatabase.Web.csproj", "{3DFC87BF-6862-42BF-82FF-3C996265FC84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDatabase.Core", "MovieDatabase.Core\MovieDatabase.Core.csproj", "{1C9D5563-CA49-449D-992E-1C81AEAF1E6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieDatabase.Core", "MovieDatabase.Core\MovieDatabase.Core.csproj", "{1C9D5563-CA49-449D-992E-1C81AEAF1E6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDatabase.Infrastructure", "MovieDatabase.Infrastructure\MovieDatabase.Infrastructure.csproj", "{E02192C8-324F-46BC-88E7-190140D0669D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieDatabase.Infrastructure", "MovieDatabase.Infrastructure\MovieDatabase.Infrastructure.csproj", "{E02192C8-324F-46BC-88E7-190140D0669D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDatabase.Common", "MovieDatabase.Common\MovieDatabase.Common.csproj", "{D2DADAD2-423C-4B15-8897-928A8F957327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieDatabase.Common", "MovieDatabase.Common\MovieDatabase.Common.csproj", "{D2DADAD2-423C-4B15-8897-928A8F957327}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MovieDatabase.Database", "MovieDatabase.Database\MovieDatabase.Database.sqlproj", "{42522943-B8A5-4602-97F0-409B87081487}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{D2DADAD2-423C-4B15-8897-928A8F957327}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2DADAD2-423C-4B15-8897-928A8F957327}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2DADAD2-423C-4B15-8897-928A8F957327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42522943-B8A5-4602-97F0-409B87081487}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
