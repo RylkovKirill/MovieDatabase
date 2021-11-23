@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MovieDatabase.Common.Paging;
 using MovieDatabase.Core;
 using MovieDatabase.Core.Entities.Catalog;
+using MovieDatabase.Core.Entities.Membership;
 using MovieDatabase.Web.Models;
 using MovieDatabase.Web.ViewModels;
 using System;
@@ -18,12 +20,18 @@ namespace MovieDatabase.Web.Controllers
     public class HomeController : BaseController
     {
         private const int PerPage = 5;
+        private readonly UserManager<User> _userManager;
+        RoleManager<Role> _roleManager;
 
-        public HomeController(IUnitOfWork unit) : base(unit) { }
+        public HomeController(IUnitOfWork unit, UserManager<User> userManager, RoleManager<Role> roleManager) : base(unit)
+        {
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
 
         [Route("")]
         [Route("[controller]")]
-        public IActionResult Index(int page = 1, string filter = null, Guid? genreId = null)
+        public async Task<IActionResult> Index(int page = 1, string filter = null, Guid? genreId = null)
         {
             var pageInfo = new PageInfo(page, PerPage);
 
@@ -37,6 +45,8 @@ namespace MovieDatabase.Web.Controllers
             };
 
             ViewData["Genres"] = new SelectList(Unit.GenreRepository.All(), "Id", "Name");
+
+
 
             return View(model);
         }

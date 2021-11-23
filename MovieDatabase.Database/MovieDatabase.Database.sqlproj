@@ -192,6 +192,7 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <None Include="dbo\Scripts\Directors.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Scripts\Genres.sql" />
@@ -199,5 +200,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Ratings.sql" />
+    <None Include="dbo\Scripts\Roles.sql" />
+    <None Include="dbo\Scripts\Users.sql" />
+    <None Include="dbo\Scripts\UserRoles.sql" />
   </ItemGroup>
 </Project>
