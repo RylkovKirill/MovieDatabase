@@ -27,6 +27,12 @@
             @Html.DisplayFor(model => model.DateOfBirth)
         </dd>
     </dl>
+    <div class="d-flex">
+        @foreach (var movie in Model.Movies)
+        {
+            <a asp-controller="Movie" asp-action="Details" asp-route-id="@Model.Id" class="badge badge-info p-1">@movie.Name</a>
+        }
+    </div>
 </div>
 <div>
     <a asp-action="List" class="btn btn-primary">Back to List</a>

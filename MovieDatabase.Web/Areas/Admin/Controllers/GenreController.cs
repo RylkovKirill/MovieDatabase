@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieDatabase.Core;
 using MovieDatabase.Core.Entities.Catalog;
+using MovieDatabase.Web.Areas.Admin.ViewModels;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
@@ -35,13 +36,18 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Genre model)
+        public IActionResult Create(GenreViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Id = Guid.NewGuid();
+                var genre = new Genre
+                {
+                    Id = Guid.NewGuid(),
+                    Name = model.Name,
+                    Description = model.Description
+                };
 
-                Unit.GenreRepository.Add(model);
+                Unit.GenreRepository.Add(genre);
                 Unit.Commit();
 
                 return RedirectToAction(nameof(List));
@@ -59,12 +65,19 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(genre);
+            var model = new GenreViewModel
+            {
+                Id = genre.Id,
+                Name = genre.Name,
+                Description = genre.Description
+            };
+
+            return View(model);
         }
 
         [HttpPost("[controller]/[action]/{id:guid}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Genre model, Guid id)
+        public IActionResult Edit(RatingViewModel model, Guid id)
         {
             if (!ModelState.IsValid)
             {

@@ -8,10 +8,10 @@
 
 <div class="d-flex align-items-start justify-content-around">
     <div class="col shadow p-4 m-2">
-        <h2>Add Genre</h2>
-        <form asp-action="AddGenre" asp-route-id="@Model.Id">
+        <h2>Add Actor</h2>
+        <form asp-action="AddActor" asp-route-id="@Model.Id">
             <div class="form-group">
-                <select name="genreId" class="form-control" asp-items="ViewBag.Genres"></select>
+                <select name="genreId" class="form-control" asp-items="ViewBag.Actors"></select>
             </div>
             <button type="submit" class="btn btn-primary icon-wrapper">
                 <i class="fas fa-plus"></i>
@@ -19,21 +19,21 @@
         </form>
     </div>
     <div class="col shadow p-4 m-2">
-        <h2>Genres</h2>
+        <h2>Actors</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Genre</th>
+                    <th>Actor</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var genre in Model.Genres)
+                @foreach (var genre in Model.Actors)
                 {
                     <tr>
-                        <td>@genre.Name</td>
+                        <td>@genre.FullName</td>
                         <td>
-                            <form asp-action="RemoveGenre" asp-route-id="@Model.Id">
+                            <form asp-action="RemoveActor" asp-route-id="@Model.Id">
                                 <input type="hidden" name="genreId" value="@genre.Id" />
                                 <button type="submit" class="btn btn-danger icon-wrapper">
                                     <i class="fas fa-trash"></i>

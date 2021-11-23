@@ -6,26 +6,26 @@ using MovieDatabase.Web.Areas.Admin.ViewModels;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
-    public class ActorController : BaseAdminController
+    public class DistributorController : BaseAdminController
     {
-        public ActorController(IUnitOfWork unit) : base(unit) { }
+        public DistributorController(IUnitOfWork unit) : base(unit) { }
 
         [Route("[controller]")]
         public IActionResult List()
         {
-            return View(Unit.ActorRepository.All());
+            return View(Unit.DistributorRepository.All());
         }
 
         [Route("[controller]/[action]/{id:guid}")]
         public IActionResult Details(Guid id)
         {
-            var actor = Unit.ActorRepository.Find(id);
-            if (actor == null)
+            var distributor = Unit.DistributorRepository.Find(id);
+            if (distributor == null)
             {
                 return NotFound();
             }
 
-            return View(actor);
+            return View(distributor);
         }
 
         [HttpGet("[controller]/[action]")]
@@ -36,19 +36,19 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ActorViewModel model)
+        public IActionResult Create(DistributorViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var actor = new Actor()
+                var distributor = new Distributor()
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    DateOfBirth = model.DateOfBirth
+                    Name = model.Name,
+                    Description = model.Description,
+                    DateFounded = model.DateFounded
                 };
 
-                Unit.ActorRepository.Add(actor);
+                Unit.DistributorRepository.Add(distributor);
                 Unit.Commit();
 
                 return RedirectToAction(nameof(List));
@@ -60,18 +60,18 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
         [HttpGet("[controller]/[action]/{id:guid}")]
         public IActionResult Edit(Guid id)
         {
-            var actor = Unit.ActorRepository.Find(id);
-            if (actor == null)
+            var distributor = Unit.DistributorRepository.Find(id);
+            if (distributor == null)
             {
                 return NotFound();
             }
 
-            var model = new ActorViewModel
+            var model = new DistributorViewModel
             {
-                Id = actor.Id,
-                FirstName = actor.FirstName,
-                LastName = actor.LastName,
-                DateOfBirth = actor.DateOfBirth
+                Id = distributor.Id,
+                Name = distributor.Name,
+                Description = distributor.Description,
+                DateFounded = distributor.DateFounded
             };
 
             return View(model);
@@ -79,22 +79,22 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]/{id:guid}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ActorViewModel model, Guid id)
+        public IActionResult Edit(DistributorViewModel model, Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var actor = Unit.ActorRepository.Find(id);
-            if (actor == null)
+            var distributor = Unit.DistributorRepository.Find(id);
+            if (distributor == null)
             {
                 return NotFound();
             }
 
-            actor.FirstName = model.FirstName;
-            actor.LastName = model.LastName;
-            actor.DateOfBirth = model.DateOfBirth;
+            distributor.Name = model.Name;
+            distributor.Description = model.Description;
+            distributor.DateFounded = model.DateFounded;
 
             Unit.Commit();
 
@@ -104,22 +104,22 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
         [HttpGet("[controller]/[action]/{id:guid}")]
         public IActionResult Delete(Guid id)
         {
-            var actor = Unit.ActorRepository.Find(id);
-            if (actor == null)
+            var distributor = Unit.DistributorRepository.Find(id);
+            if (distributor == null)
             {
                 return NotFound();
             }
 
-            return View(actor);
+            return View(distributor);
         }
 
         [HttpPost("[controller]/[action]/{id:guid}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            var actor = Unit.ActorRepository.Find(id);
+            var distributor = Unit.DistributorRepository.Find(id);
 
-            Unit.ActorRepository.Remove(actor);
+            Unit.DistributorRepository.Remove(distributor);
             Unit.Commit();
 
             return RedirectToAction(nameof(List));

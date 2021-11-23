@@ -68,6 +68,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
             var model = new DirectorViewModel
             {
+                Id = director.Id,
                 FirstName = director.FirstName,
                 LastName = director.LastName,
                 DateOfBirth = director.DateOfBirth

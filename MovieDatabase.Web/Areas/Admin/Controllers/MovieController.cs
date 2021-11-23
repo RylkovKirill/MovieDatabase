@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MovieDatabase.Core;
 using MovieDatabase.Core.Entities.Catalog;
-using MovieDatabase.Infrastructure;
+using MovieDatabase.Web.Areas.Admin.ViewModels;
 using MovieDatabase.Web.Services;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
@@ -36,26 +33,17 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             return View(Unit.MovieRepository.All());
         }
 
-        //// GET: Admin/Movies/Details/5
-        //public async Task<IActionResult> Details(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("[controller]/[action]/{id:guid}")]
+        public IActionResult Details(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
 
-        //    var movie = await _context.Movies
-        //        .Include(m => m.Director)
-        //        .Include(m => m.Distributor)
-        //        .Include(m => m.Rating)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (movie == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(movie);
-        //}
+            return View(movie);
+        }
 
         [HttpGet("[controller]/[action]")]
         public IActionResult Create()
@@ -69,21 +57,35 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Movie movie, IFormFile file)
+        public IActionResult Create(MovieViewModel model, IFormFile file)
         {
             if (ModelState.IsValid)
             {
-                movie.Id = Guid.NewGuid();
-
                 if (file != null)
                 {
-                    var fileName = movie.Id.ToString() + Path.GetExtension(file.FileName);
+                    var fileName = model.Id.ToString() + Path.GetExtension(file.FileName);
 
                     var path = Path.Combine(_environment.WebRootPath, "Files/Images/Movies", fileName);
                     _fileService.Save(file, path);
 
-                    movie.ImagePath = fileName;
+                    model.ImagePath = fileName;
                 }
+
+                var movie = new Movie
+                {
+                    Name = model.Name,
+                    Country = model.Country,
+                    Language = model.Language,
+                    Description = model.Description,
+                    ImagePath = model.ImagePath,
+                    Budget = model.Budget,
+                    BoxOffice = model.BoxOffice,
+                    Runtime = model.Runtime,
+                    DateOfRelease = model.DateOfRelease,
+                    RatingId = model.RatingId,
+                    DirectorId = model.DirectorId,
+                    DistributorId = model.DistributorId,
+                };
 
                 Unit.MovieRepository.Add(movie);
                 Unit.Commit();
@@ -94,102 +96,104 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             ViewData["Ratings"] = new SelectList(Unit.RatingRepository.All(), "Id", "Name");
             ViewData["Directors"] = new SelectList(Unit.DirectorRepository.All(), "Id", "FirstName");
             ViewData["Distributors"] = new SelectList(Unit.DistributorRepository.All(), "Id", "Name");
+
+            return View(model);
+        }
+
+        [HttpGet("[controller]/[action]/{id:guid}")]
+        public IActionResult Edit(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var model = new MovieViewModel
+            {
+                Name = movie.Name,
+                Country = movie.Country,
+                Language = movie.Language,
+                Description = movie.Description,
+                ImagePath = movie.ImagePath,
+                Budget = movie.Budget,
+                BoxOffice = movie.BoxOffice,
+                Runtime = movie.Runtime,
+                DateOfRelease = movie.DateOfRelease,
+                RatingId = movie.RatingId,
+                DirectorId = movie.DirectorId,
+                DistributorId = movie.DistributorId,
+            };
+
+            ViewData["Ratings"] = new SelectList(Unit.RatingRepository.All(), "Id", "Name");
+            ViewData["Directors"] = new SelectList(Unit.DirectorRepository.All(), "Id", "FirstName");
+            ViewData["Distributors"] = new SelectList(Unit.DistributorRepository.All(), "Id", "Name");
+
+            return View(model);
+        }
+
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(MovieViewModel model, Guid id)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["Ratings"] = new SelectList(Unit.RatingRepository.All(), "Id", "Name");
+                ViewData["Directors"] = new SelectList(Unit.DirectorRepository.All(), "Id", "FirstName");
+                ViewData["Distributors"] = new SelectList(Unit.DistributorRepository.All(), "Id", "Name");
+
+                return View(model);
+            }
+
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            movie.Name = movie.Name;
+            movie.Country = movie.Country;
+            movie.Language = movie.Language;
+            movie.Description = movie.Description;
+            movie.ImagePath = movie.ImagePath;
+            movie.Budget = movie.Budget;
+            movie.BoxOffice = movie.BoxOffice;
+            movie.Runtime = movie.Runtime;
+            movie.DateOfRelease = movie.DateOfRelease;
+            movie.RatingId = movie.RatingId;
+            movie.DirectorId = movie.DirectorId;
+            movie.DistributorId = movie.DistributorId;
+
+            Unit.Commit();
+
+            return RedirectToAction(nameof(List));
+
+        }
+
+        [HttpGet("[controller]/[action]/{id:guid}")]
+        public IActionResult Delete(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
             return View(movie);
         }
 
-        //// GET: Admin/Movies/Edit/5
-        //public async Task<IActionResult> Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
 
-        //    var movie = await _context.Movies.FindAsync(id);
-        //    if (movie == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["DirectorId"] = new SelectList(_context.Directors, "Id", "FirstName", movie.DirectorId);
-        //    ViewData["DistributorId"] = new SelectList(_context.Distributors, "Id", "Name", movie.DistributorId);
-        //    ViewData["RatingId"] = new SelectList(_context.Ratings, "Id", "Name", movie.RatingId);
-        //    return View(movie);
-        //}
+            Unit.MovieRepository.Remove(movie);
+            Unit.Commit();
 
-        //// POST: Admin/Movies/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Guid id, [Bind("Name,Country,Language,Description,ImagePath,Budget,BoxOffice,Runtime,DateOfRelease,RatingId,DirectorId,DistributorId,Id")] Movie movie)
-        //{
-        //    if (id != movie.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(movie);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!MovieExists(movie.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(List));
-        //    }
-        //    ViewData["DirectorId"] = new SelectList(_context.Directors, "Id", "FirstName", movie.DirectorId);
-        //    ViewData["DistributorId"] = new SelectList(_context.Distributors, "Id", "Name", movie.DistributorId);
-        //    ViewData["RatingId"] = new SelectList(_context.Ratings, "Id", "Name", movie.RatingId);
-        //    return View(movie);
-        //}
-
-        //// GET: Admin/Movies/Delete/5
-        //public async Task<IActionResult> Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var movie = await _context.Movies
-        //        .Include(m => m.Director)
-        //        .Include(m => m.Distributor)
-        //        .Include(m => m.Rating)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (movie == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(movie);
-        //}
-
-        //// POST: Admin/Movies/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(Guid id)
-        //{
-        //    var movie = await _context.Movies.FindAsync(id);
-        //    _context.Movies.Remove(movie);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(List));
-        //}
-
-        //private bool MovieExists(Guid id)
-        //{
-        //    return _context.Movies.Any(e => e.Id == id);
-        //}
+            return RedirectToAction(nameof(List));
+        }
 
         [HttpGet("[controller]/[action]/{id:guid}")]
         public IActionResult Genres(Guid id)
@@ -245,6 +249,62 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             Unit.Commit();
 
             return RedirectToAction(nameof(Genres), new { id });
+        }
+
+        [HttpGet("[controller]/[action]/{id:guid}")]
+        public IActionResult Actors(Guid id)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Actors"] = new SelectList(Unit.ActorRepository.All().Except(movie.Actors), "Id", "FullName");
+
+            return View(movie);
+        }
+
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        public IActionResult AddActor(Guid id, Guid actroId)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var actor = Unit.ActorRepository.Find(actroId);
+            if (actor == null)
+            {
+                return NotFound();
+            }
+
+            movie.Actors.Add(actor);
+            Unit.Commit();
+
+            return RedirectToAction(nameof(Actors), new { id });
+        }
+
+        [HttpPost("[controller]/[action]/{id:guid}")]
+        public IActionResult RemovActor(Guid id, Guid actorId)
+        {
+            var movie = Unit.MovieRepository.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var actor = Unit.ActorRepository.Find(actorId);
+            if (actor == null)
+            {
+                return NotFound();
+            }
+
+            movie.Actors.Remove(actor);
+            Unit.Commit();
+
+            return RedirectToAction(nameof(Actors), new { id });
         }
     }
 }

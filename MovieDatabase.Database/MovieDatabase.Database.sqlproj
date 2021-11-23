@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Scripts\Genres.sql" />
+    <None Include="dbo\Scripts\Actors.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Ratings.sql" />
