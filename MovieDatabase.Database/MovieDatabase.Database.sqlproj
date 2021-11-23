@@ -122,6 +122,9 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Scripts" />
+    <Folder Include="dbo\Scripts\History" />
+    <Folder Include="dbo\Scripts\History\Review" />
+    <Folder Include="dbo\Scripts\History\Moview" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\__EFMigrationsHistory.sql">
@@ -193,15 +196,23 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <None Include="dbo\Scripts\Directors.sql" />
+    <Build Include="dbo\Tables\MoviesHistory.sql" />
+    <Build Include="dbo\Tables\ReviewsHistory.sql" />
+    <None Include="dbo\Scripts\History\Moview\Delete.sql" />
+    <None Include="dbo\Scripts\History\Moview\Insert.sql" />
+    <None Include="dbo\Scripts\History\Moview\Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Scripts\Genres.sql" />
     <None Include="dbo\Scripts\Actors.sql" />
+    <None Include="dbo\Scripts\History\Review\Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Ratings.sql" />
     <None Include="dbo\Scripts\Roles.sql" />
     <None Include="dbo\Scripts\Users.sql" />
     <None Include="dbo\Scripts\UserRoles.sql" />
+    <None Include="dbo\Scripts\History\Review\Update.sql" />
+    <None Include="dbo\Scripts\History\Review\Delete.sql" />
   </ItemGroup>
 </Project>

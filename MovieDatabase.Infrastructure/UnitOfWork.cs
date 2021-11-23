@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Options;
 using MovieDatabase.Core;
 using MovieDatabase.Core.Repositories.Catalog;
+using MovieDatabase.Core.Repositories.History;
 using MovieDatabase.Infrastructure.Repositories.Catalog;
+using MovieDatabase.Infrastructure.Repositories.History;
 using System;
 
 namespace MovieDatabase.Infrastructure
@@ -19,22 +21,20 @@ namespace MovieDatabase.Infrastructure
         private MovieRepository _movieRepository;
         private RatingRepository _ratingRepository;
         private ReviewRepository _reviewRepository;
+        private MovieHistoryRepository _movieHistoryRepository;
+        private ReviewHistoryRepository _reviewHistoryRepository;
 
         private bool _isDisposed;
 
         public IActorRepository ActorRepository => _actorRepository ??= new ActorRepository(Context);
-
         public IDirectorRepository DirectorRepository => _directorRepository ??= new DirectorRepository(Context);
-
         public IDistributorRepository DistributorRepository => _distributorRepository ??= new DistributorRepository(Context);
-
         public IGenreRepository GenreRepository => _genreRepository ??= new GenreRepository(Context);
-
         public IMovieRepository MovieRepository => _movieRepository ??= new MovieRepository(Context);
-
         public IRatingRepository RatingRepository => _ratingRepository ??= new RatingRepository(Context);
-
         public IReviewRepository ReviewRepository => _reviewRepository ??= new ReviewRepository(Context);
+        public IMovieHistoryRepository MovieHistoryRepository => _movieHistoryRepository ??= new MovieHistoryRepository(Context);
+        public IReviewHistoryRepository ReviewHistoryRepository => _reviewHistoryRepository ??= new ReviewHistoryRepository(Context);
 
         private ApplicationDbContext Context => _context ??= new ApplicationDbContext(_options);
 

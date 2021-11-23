@@ -46,8 +46,6 @@ namespace MovieDatabase.Web.Controllers
 
             ViewData["Genres"] = new SelectList(Unit.GenreRepository.All(), "Id", "Name");
 
-
-
             return View(model);
         }
 

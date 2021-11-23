@@ -4,7 +4,7 @@ using MovieDatabase.Core.Entities.Catalog;
 
 namespace MovieDatabase.Infrastructure.Configs.Catalog
 {
-    class MovieConfig : IEntityTypeConfiguration<Movie>
+    public class MovieConfig : IEntityTypeConfiguration<Movie>
     {
         public void Configure(EntityTypeBuilder<Movie> builder)
         {

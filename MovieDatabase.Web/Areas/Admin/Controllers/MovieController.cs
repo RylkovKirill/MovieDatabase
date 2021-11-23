@@ -61,23 +61,13 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (file != null)
-                {
-                    var fileName = model.Id.ToString() + Path.GetExtension(file.FileName);
-
-                    var path = Path.Combine(_environment.WebRootPath, "Files/Images/Movies", fileName);
-                    _fileService.Save(file, path);
-
-                    model.ImagePath = fileName;
-                }
-
                 var movie = new Movie
                 {
+                    Id = Guid.NewGuid(),
                     Name = model.Name,
                     Country = model.Country,
                     Language = model.Language,
                     Description = model.Description,
-                    ImagePath = model.ImagePath,
                     Budget = model.Budget,
                     BoxOffice = model.BoxOffice,
                     Runtime = model.Runtime,
@@ -86,6 +76,16 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                     DirectorId = model.DirectorId,
                     DistributorId = model.DistributorId,
                 };
+
+                if (file != null)
+                {
+                    var fileName = movie.Id.ToString() + Path.GetExtension(file.FileName);
+
+                    var path = Path.Combine(_environment.WebRootPath, "Files/Images/Movies", fileName);
+                    _fileService.Save(file, path);
+
+                    movie.ImagePath = fileName;
+                }
 
                 Unit.MovieRepository.Add(movie);
                 Unit.Commit();

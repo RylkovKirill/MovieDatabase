@@ -28,7 +28,6 @@ namespace MovieDatabase.Web.Areas.Admin.ViewModels
         [StringLength(Movie.DescriptionLength, ErrorMessage = "The {0} must be at least {1} characters long.")]
         public string Description { get; set; }
 
-        [Required]
         [Display(Name = "Image")]
         [StringLength(Movie.ImagePathLength, ErrorMessage = "The {0} must be at least {1} characters long.")]
         public string ImagePath { get; set; }

@@ -1,4 +1,5 @@
 ﻿using MovieDatabase.Core.Repositories.Catalog;
+using MovieDatabase.Core.Repositories.History;
 using System;
 
 
@@ -13,6 +14,9 @@ namespace MovieDatabase.Core
         IMovieRepository MovieRepository { get; }
         IRatingRepository RatingRepository { get; }
         IReviewRepository ReviewRepository { get; }
+
+        IMovieHistoryRepository MovieHistoryRepository { get; }
+        IReviewHistoryRepository ReviewHistoryRepository { get; }
 
         void Commit();
     }

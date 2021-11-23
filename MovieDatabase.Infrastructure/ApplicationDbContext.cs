@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieDatabase.Core.Entities.Catalog;
+using MovieDatabase.Core.Entities.History;
 using MovieDatabase.Core.Entities.Membership;
 using MovieDatabase.Infrastructure.Configs.Catalog;
 using MovieDatabase.Infrastructure.Configs.Membership;
@@ -18,6 +19,9 @@ namespace MovieDatabase.Infrastructure
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<MovieHistory> MoviesHistory { get; set; }
+        public DbSet<ReviewHistory> ReviewsHistory { get; set; }
+
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,6 +35,9 @@ namespace MovieDatabase.Infrastructure
             builder.ApplyConfiguration(new MovieConfig());
             builder.ApplyConfiguration(new RatingConfig());
             builder.ApplyConfiguration(new ReviewConfig());
+
+            builder.ApplyConfiguration(new MovieHistoryConfig());
+            builder.ApplyConfiguration(new ReviewHistoryConfig());
 
             base.OnModelCreating(builder);
         }
