@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "History";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<div>
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_HistoryNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

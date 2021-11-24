@@ -1,0 +1,38 @@
+﻿@using MovieDatabase.Web.Areas.Admin.Views.History
+@model IEnumerable<ReviewHistory>
+
+@{
+    Layout = "_HistoryLayout.cshtml";
+    ViewData["Title"] = "Reviews History";
+    ViewData["ActivePage"] = HistoryNavPages.ReviewsHistory;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-bordered shadow">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Movie</th>
+            <th>Action</th>
+            <th>Date</th>
+            <th>Detais</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User.UserName</td>
+                <td>@item.Movie.Name</td>
+                <td>@item.Action</td>
+                <td>@item.Date</td>
+                <td>
+                    <a asp-action="MovieHistoryDetails" asp-route-id="@item.Id" class="btn btn-primary icon-wrapper">
+                        <i class="fas fa-info"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

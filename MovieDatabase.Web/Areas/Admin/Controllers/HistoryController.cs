@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieDatabase.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
@@ -11,9 +8,40 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
     {
         public HistoryController(IUnitOfWork unit) : base(unit) { }
 
-        public IActionResult Index()
+        [Route("[controller]/[action]")]
+        public IActionResult MoviesHistory()
         {
-            return View();
+            return View(Unit.MovieHistoryRepository.All());
+        }
+
+        [Route("[controller]/[action]")]
+        public IActionResult ReviewsHistory()
+        {
+            return View(Unit.ReviewHistoryRepository.All());
+        }
+
+        [Route("[controller]/[action]/{id:guid}")]
+        public IActionResult MovieHistoryDetails(Guid id)
+        {
+            var movieHistory = Unit.MovieHistoryRepository.Find(id);
+            if (movieHistory == null)
+            {
+                return NotFound();
+            }
+
+            return View(movieHistory);
+        }
+
+        [Route("[controller]/[action]/{id:guid}")]
+        public IActionResult ReviewHistoryDetails(Guid id)
+        {
+            var reviewHistory = Unit.ReviewHistoryRepository.Find(id);
+            if (reviewHistory == null)
+            {
+                return NotFound();
+            }
+
+            return View(reviewHistory);
         }
     }
 }

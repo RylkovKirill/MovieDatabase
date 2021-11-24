@@ -1,0 +1,6 @@
+﻿@using MovieDatabase.Web.Areas.Admin.Views.History
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link @HistoryNavPages.MoviesNavClass(ViewContext)" id="moviesHistory" asp-controller="History" asp-action="MoviesHistory">Movies History</a></li>
+    <li class="nav-item"><a class="nav-link @HistoryNavPages.ReviewsNavClass(ViewContext)" id="reviewsHistory" asp-controller="History" asp-action="ReviewsHistory">Reviews History</a></li>
+</ul>
