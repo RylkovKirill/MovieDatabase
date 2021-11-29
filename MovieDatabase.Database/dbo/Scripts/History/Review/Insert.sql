@@ -2,7 +2,7 @@
 ON [dbo].[Reviews]
 AFTER INSERT
 AS
-INSERT INTO [dbo].[ReviewHistory] (  
+INSERT INTO [dbo].[ReviewsHistory] (  
     [Id],
     [ReviewId],
     [Rating],

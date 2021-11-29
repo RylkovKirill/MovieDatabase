@@ -34,7 +34,7 @@
 <div>
     @foreach (var item in Model.Movies.Items)
     {
-        <div class="card shadow flex-row p-4">
+        <div class="card shadow flex-row p-4 my-1">
             <img src="~/Files/Images/Movies/@item.ImagePath" alt="@item.Name Image" class="card-img-top" style="width: 90pt; height: 120pt">
             <div class="card-body">
                 <h5 class="card-title my-1">@item.Name</h5>
@@ -51,7 +51,9 @@
     }
 </div>
 
-<paged-list model="Model.Movies" action="Index" action-genreId="@(Model.GenreId)" action-filter="@(Model.Filter)"></paged-list>
+<div class="my-2">
+    <paged-list model="Model.Movies" action="Index" action-genreId="@(Model.GenreId)" action-filter="@(Model.Filter)"></paged-list>
+</div>
 
 <script>
     function submitFilterForm() {

@@ -1,0 +1,143 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MovieDatabase.Core
+
+@model Movie
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@inject IUnitOfWork UnitOfWork
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+@functions{
+    public async Task<Review> GetReview()
+    {
+        var user = await UserManager.FindByNameAsync(User.Identity.Name);
+        return UnitOfWork.ReviewRepository.All(r => r.UserId == user.Id && r.MovieId == Model.Id).FirstOrDefault();
+    }
+}
+
+<div class="d-flex justify-content-between">
+    <h1>@ViewData["Title"]</h1>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var review = await GetReview();
+        if (review == default)
+        {
+            <a asp-controller="Home" asp-action="CreateReview" asp-route-movieId="@Model.Id">Create Review</a>
+        }
+        else
+        {
+            <a asp-controller="Home" asp-action="EditReview" asp-route-id="@review.Id">Edit Review</a>
+        }
+    }
+
+</div>
+
+<div class="d-flex flex-row p-4 my-1">
+    <img src="~/Files/Images/Movies/@Model.ImagePath" alt="@Model.Name Image" class="card-img-top" style="width: 180pt; height: 240pt">
+    <div class="card-body">
+        <div class="my-1">
+            @foreach (var genre in Model.Genres)
+            {
+                <div class="badge badge-info p-1">@genre.Name</div>
+            }
+        </div>
+        <div class="card-text my-1">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Country)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Country)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Language)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Language)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Budget)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Budget)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.BoxOffice)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.BoxOffice)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Runtime)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.DateOfRelease)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.DateOfRelease)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Rating)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Rating.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Director)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Director.FullName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Distributor)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Distributor.Name)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div>@Model.Description</div>
+
+<div>
+    <h2 class="my-4">Reviews</h2>
+    @foreach (var item in Model.Reviews)
+    {
+        <div class="card col-md-6 shadow">
+            <div class="card-body">
+                <div class="card-text my-1">
+                    <dl class="row">
+                        <dt class="col-sm-5">
+                            Rating
+                        </dt>
+                        <dd class="col-sm-7">
+                            @item.Rating
+                        </dd>
+                        <dt class="col-sm-5">
+                            Content
+                        </dt>
+                        <dd class="col-sm-7">
+                            @item.Content
+                        </dd>
+                        <dt class="col-sm-5">
+                            Date
+                        </dt>
+                        <dd class="col-sm-7">
+                            @item.DateCreated
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
+</div>
