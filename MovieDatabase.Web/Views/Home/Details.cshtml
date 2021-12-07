@@ -109,6 +109,17 @@
 
 <div>@Model.Description</div>
 
+@if (Model.Actors.Count() > 0)
+{
+    <div>
+        <h2 class="my-4">Actors</h2>
+        @foreach (var actor in Model.Actors)
+        {
+            <a asp-action="ActorDetails" asp-route-id="@actor.Id" class="mr-2">@actor.FullName</a>
+        }
+    </div>
+}
+
 <div>
     <h2 class="my-4">Reviews</h2>
     @foreach (var item in Model.Reviews)

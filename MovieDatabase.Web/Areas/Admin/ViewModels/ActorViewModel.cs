@@ -27,5 +27,12 @@ namespace MovieDatabase.Web.Areas.Admin.ViewModels
         [Display(Name = "Date Of Birth")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
+
+        [Display(Name = "Biogaphy")]
+        [StringLength(Actor.BiogaphyLength, ErrorMessage = "The {0} must be at least {1} characters long.")]
+        public string Biogaphy { get; set; }
+
+        [Display(Name = "Avatar")]
+        public byte[] Avatar { get; set; }
     }
 }

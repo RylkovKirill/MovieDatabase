@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieDatabase.Core;
 using MovieDatabase.Core.Entities.Catalog;
@@ -36,7 +38,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ActorViewModel model)
+        public IActionResult Create(ActorViewModel model, IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -46,8 +48,15 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Country = model.Country,
-                    DateOfBirth = model.DateOfBirth
+                    DateOfBirth = model.DateOfBirth,
+                    Biogaphy = model.Biogaphy
                 };
+
+                if (file != null)
+                {
+                    using var binaryReader = new BinaryReader(file.OpenReadStream());
+                    actor.Avatar = binaryReader.ReadBytes((int)file.Length);
+                }
 
                 Unit.ActorRepository.Add(actor);
                 Unit.Commit();
@@ -73,7 +82,9 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 FirstName = actor.FirstName,
                 LastName = actor.LastName,
                 DateOfBirth = actor.DateOfBirth,
-                Country = actor.Country
+                Country = actor.Country,
+                Biogaphy = actor.Biogaphy,
+                Avatar = actor.Avatar
             };
 
             return View(model);
@@ -81,7 +92,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]/{id:guid}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ActorViewModel model, Guid id)
+        public IActionResult Edit(ActorViewModel model, IFormFile file, Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -98,6 +109,13 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             actor.LastName = model.LastName;
             actor.DateOfBirth = model.DateOfBirth;
             actor.Country = model.Country;
+            actor.Biogaphy = model.Biogaphy;
+
+            if (file != null)
+            {
+                using var binaryReader = new BinaryReader(file.OpenReadStream());
+                actor.Avatar = binaryReader.ReadBytes((int)file.Length);
+            }
 
             Unit.Commit();
 

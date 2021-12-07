@@ -266,7 +266,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
         }
 
         [HttpPost("[controller]/[action]/{id:guid}")]
-        public IActionResult AddActor(Guid id, Guid actroId)
+        public IActionResult AddActor(Guid id, Guid actorId)
         {
             var movie = Unit.MovieRepository.Find(id);
             if (movie == null)
@@ -274,7 +274,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var actor = Unit.ActorRepository.Find(actroId);
+            var actor = Unit.ActorRepository.Find(actorId);
             if (actor == null)
             {
                 return NotFound();

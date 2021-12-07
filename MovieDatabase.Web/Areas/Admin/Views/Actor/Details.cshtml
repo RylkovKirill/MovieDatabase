@@ -7,39 +7,55 @@
 <h1>Details</h1>
 
 <div class="my-4">
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-    </dl>
-    <div class="d-flex">
-        @foreach (var movie in Model.Movies)
+    <div class="d-flex align-items-start">
+        @if (Model.Avatar != null)
         {
-            <a asp-controller="Movie" asp-action="Details" asp-route-id="@Model.Id" class="badge badge-info p-1">@movie.Name</a>
+            <img class="m-1 mr-2" style="width: 90pt;" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" />
         }
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Country)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Country)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.DateOfBirth)
+                </dd>
+            </dl>
+        </div>
     </div>
+
+    <div class="my-4">@Model.Biogaphy</div>
+
+    @if (Model.Movies.Count() > 0)
+    {
+        <h2 class="my-4">Movies </h2>
+        <div class="d-flex align-items-center">
+            @foreach (var movie in Model.Movies)
+            {
+                <a asp-controller="Movie" asp-action="Details" asp-route-id="@Model.Id" class="badge badge-info p-1 mr-2">@movie.Name</a>
+            }
+        </div>
+    }
 </div>
+
 <div>
     <a asp-action="List" class="btn btn-primary">Back to List</a>
 </div>
