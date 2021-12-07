@@ -45,6 +45,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                     Id = Guid.NewGuid(),
                     FirstName = model.FirstName,
                     LastName = model.LastName,
+                    Country = model.Country,
                     DateOfBirth = model.DateOfBirth
                 };
 
@@ -71,7 +72,8 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 Id = actor.Id,
                 FirstName = actor.FirstName,
                 LastName = actor.LastName,
-                DateOfBirth = actor.DateOfBirth
+                DateOfBirth = actor.DateOfBirth,
+                Country = actor.Country
             };
 
             return View(model);
@@ -95,6 +97,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             actor.FirstName = model.FirstName;
             actor.LastName = model.LastName;
             actor.DateOfBirth = model.DateOfBirth;
+            actor.Country = model.Country;
 
             Unit.Commit();
 

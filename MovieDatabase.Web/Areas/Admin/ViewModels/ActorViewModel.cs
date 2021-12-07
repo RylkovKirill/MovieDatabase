@@ -19,6 +19,11 @@ namespace MovieDatabase.Web.Areas.Admin.ViewModels
         public string LastName { get; set; }
 
         [Required]
+        [Display(Name = "Country")]
+        [StringLength(Actor.CountryLength, ErrorMessage = "The {0} must be at least {1} characters long.")]
+        public string Country { get; set; }
+
+        [Required]
         [Display(Name = "Date Of Birth")]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }

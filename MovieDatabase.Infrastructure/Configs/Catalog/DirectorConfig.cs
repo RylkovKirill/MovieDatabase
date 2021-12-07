@@ -12,6 +12,7 @@ namespace MovieDatabase.Infrastructure.Configs.Catalog
 
             builder.Property(d => d.FirstName).IsRequired().HasMaxLength(Director.FirstNameLength);
             builder.Property(d => d.LastName).IsRequired().HasMaxLength(Director.LastNameLength);
+            builder.Property(a => a.Country).IsRequired().HasMaxLength(Actor.CountryLength);
             builder.Property(d => d.DateOfBirth).IsRequired();
 
             builder.HasMany(d => d.Movies).WithOne(m => m.Director).HasForeignKey(m => m.DirectorId);

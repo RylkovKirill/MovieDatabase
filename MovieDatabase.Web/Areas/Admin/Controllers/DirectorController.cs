@@ -45,7 +45,8 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                     Id = Guid.NewGuid(),
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    DateOfBirth = model.DateOfBirth
+                    DateOfBirth = model.DateOfBirth,
+                    Country = model.Country
                 };
 
                 Unit.DirectorRepository.Add(director);
@@ -71,7 +72,8 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 Id = director.Id,
                 FirstName = director.FirstName,
                 LastName = director.LastName,
-                DateOfBirth = director.DateOfBirth
+                DateOfBirth = director.DateOfBirth,
+                Country = director.Country
             };
 
             return View(model);
@@ -95,6 +97,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             director.FirstName = model.FirstName;
             director.LastName = model.LastName;
             director.DateOfBirth = model.DateOfBirth;
+            director.Country = model.Country;
 
             Unit.Commit();
 
