@@ -2,40 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MovieDatabase.Core;
 using MovieDatabase.Core.Entities.Membership;
 using MovieDatabase.Infrastructure;
 
 namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class UserController : Controller
+    public class UserController : BaseAdminController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(IUnitOfWork unit, UserManager<User> userManager, RoleManager<Role> roleManager) : base(unit)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        // GET: Admin/User
-        public async Task<IActionResult> Index()
+        [Route("[controller]")]
+        public IActionResult List()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(_userManager.Users);
         }
 
-        // GET: Admin/User/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [Route("[controller]/[action]/{id:guid}")]
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
@@ -44,112 +41,58 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             return View(user);
         }
 
-        // GET: Admin/User/Create
-        public IActionResult Create()
+        [Route("[controller]/[action]/{id:guid}")]
+        public async Task<IActionResult> Roles(Guid id)
         {
-            return View();
-        }
-
-        // POST: Admin/User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                user.Id = Guid.NewGuid();
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Admin/User/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
+            var roles = await _userManager.GetRolesAsync(user);
+            ViewBag.Roles = roles;
+            ViewBag.PotentialRoles = _roleManager.Roles.Where(r => !roles.ToList().Contains(r.Name)).ToList();
             return View(user);
         }
 
-        // POST: Admin/User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] User user)
+        [HttpPost("[controller]/AddRole/{id:guid}")]
+        public async Task<IActionResult> AddRoleAsync(Guid id, Guid roleId)
         {
-            if (id != user.Id)
+            var role = await _roleManager.FindByIdAsync(roleId.ToString());
+            if (role == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Admin/User/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            await _userManager.AddToRoleAsync(user, role.Name);
+
+            return RedirectToAction(nameof(Roles), new { id });
         }
 
-        // POST: Admin/User/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        [HttpPost("[controller]/RemoveRole/{id:guid}")]
+        public async Task<IActionResult> RemoveRoleAsync(Guid id, string roleName)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null)
+            {
+                return NotFound();
+            }
 
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.RemoveFromRoleAsync(user, role.Name);
+
+            return RedirectToAction(nameof(Roles), new { id });
         }
     }
 }

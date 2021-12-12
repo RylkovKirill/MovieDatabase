@@ -72,6 +72,38 @@ namespace MovieDatabase.Web.Controllers
             };
         }
 
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Reviews()
+        {
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var reviews = Unit.ReviewRepository.All(r => r.User == user);
+
+            return View(reviews);
+        }
+
+        [Route("[controller]/[action]/{id:guid}")]
+        public async Task<IActionResult> ReviewDetails(Guid id)
+        {
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var review = Unit.ReviewRepository.Find(id);
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            return View(review);
+        }
+
         [HttpGet("[controller]/[action]/{movieId:guid}")]
         public IActionResult CreateReview(Guid movieId)
         {

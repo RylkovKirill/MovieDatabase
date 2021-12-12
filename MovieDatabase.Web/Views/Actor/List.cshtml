@@ -1,7 +1,7 @@
-﻿@model IEnumerable<User>
+﻿@model IEnumerable<Actor>
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Actors";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,7 +9,7 @@
 <table class="table table-bordered shadow">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Actor</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -18,17 +18,11 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
+                    @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary icon-wrapper">
                         <i class="fas fa-info"></i>
-                    </a>
-                    <a asp-action="Roles" asp-route-id="@item.Id" class="btn btn-warning icon-wrapper">
-                        <i class="fas fa-tags"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger icon-wrapper">
-                        <i class="fas fa-trash"></i>
                     </a>
                 </td>
             </tr>

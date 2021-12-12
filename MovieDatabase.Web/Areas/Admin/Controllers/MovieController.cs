@@ -134,9 +134,8 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
 
         [HttpPost("[controller]/[action]/{id:guid}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(MovieViewModel model, Guid id)
+        public IActionResult Edit(MovieViewModel model, IFormFile file, Guid id)
         {
-
             if (!ModelState.IsValid)
             {
                 ViewData["Ratings"] = new SelectList(Unit.RatingRepository.All(), "Id", "Name");
@@ -152,18 +151,27 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            movie.Name = movie.Name;
-            movie.Country = movie.Country;
-            movie.Language = movie.Language;
-            movie.Description = movie.Description;
-            movie.ImagePath = movie.ImagePath;
-            movie.Budget = movie.Budget;
-            movie.BoxOffice = movie.BoxOffice;
-            movie.Runtime = movie.Runtime;
-            movie.DateOfRelease = movie.DateOfRelease;
-            movie.RatingId = movie.RatingId;
-            movie.DirectorId = movie.DirectorId;
-            movie.DistributorId = movie.DistributorId;
+            movie.Name = model.Name;
+            movie.Country = model.Country;
+            movie.Language = model.Language;
+            movie.Description = model.Description;
+            movie.Budget = model.Budget;
+            movie.BoxOffice = model.BoxOffice;
+            movie.Runtime = model.Runtime;
+            movie.DateOfRelease = model.DateOfRelease;
+            movie.RatingId = model.RatingId;
+            movie.DirectorId = model.DirectorId;
+            movie.DistributorId = model.DistributorId;
+
+            if (file != null)
+            {
+                var fileName = movie.Id.ToString() + Path.GetExtension(file.FileName);
+
+                var path = Path.Combine(_environment.WebRootPath, "Files/Images/Movies", fileName);
+                _fileService.Save(file, path);
+
+                movie.ImagePath = fileName;
+            }
 
             Unit.Commit();
 

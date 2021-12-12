@@ -115,7 +115,7 @@
         <h2 class="my-4">Actors</h2>
         @foreach (var actor in Model.Actors)
         {
-            <a asp-action="ActorDetails" asp-route-id="@actor.Id" class="mr-2">@actor.FullName</a>
+            <a asp-controller="Actor" asp-action="Details" asp-route-id="@actor.Id" class="mr-2">@actor.FullName</a>
         }
     </div>
 }

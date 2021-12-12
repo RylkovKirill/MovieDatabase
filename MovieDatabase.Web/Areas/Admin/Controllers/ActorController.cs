@@ -49,7 +49,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                     LastName = model.LastName,
                     Country = model.Country,
                     DateOfBirth = model.DateOfBirth,
-                    Biogaphy = model.Biogaphy
+                    Biography = model.Biography
                 };
 
                 if (file != null)
@@ -83,7 +83,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
                 LastName = actor.LastName,
                 DateOfBirth = actor.DateOfBirth,
                 Country = actor.Country,
-                Biogaphy = actor.Biogaphy,
+                Biography = actor.Biography,
                 Avatar = actor.Avatar
             };
 
@@ -109,7 +109,7 @@ namespace MovieDatabase.Web.Areas.Admin.Controllers
             actor.LastName = model.LastName;
             actor.DateOfBirth = model.DateOfBirth;
             actor.Country = model.Country;
-            actor.Biogaphy = model.Biogaphy;
+            actor.Biography = model.Biography;
 
             if (file != null)
             {
